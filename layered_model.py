@@ -3,14 +3,13 @@ from tensorflow import keras
 from tensorflow.keras import layers
 import tensorflow as tf
 
-def define_dense_model_single_layer(input_length=43, activation_f='sigmoid', output_length=1):
+def define_dense_model_single_layer(input_length, activation_f='sigmoid', output_length=1):
     """Define a dense model with a single layer with the following parameters:
     input_length: the number of inputs
     activation_f: the activation function
     output_length: the number of outputs (number of neurons)"""
     model = keras.Sequential([
-        keras.Input(shape=(input_length,)),
-        layers.Dense(output_length, activation=activation_f)
+        layers.Dense(output_length, activation=activation_f, input_shape=(input_length,))
     ])
     return model
 
@@ -24,8 +23,7 @@ def define_dense_model_with_hidden_layer(input_length,
     hidden_layer_size: the number of neurons in the hidden layer
     output_length: the number of outputs (number of neurons in the output layer)"""
     model = keras.Sequential([
-        keras.Input(shape=(input_length,)),
-        layers.Dense(hidden_layer_size, activation=activation_func_array[0]),
+        layers.Dense(hidden_layer_size, activation=activation_func_array[0], input_shape=(input_length,)),
         layers.Dense(output_length, activation=activation_func_array[1])
     ])
     return model
@@ -44,9 +42,9 @@ def binarize_labels(labels, target_digit=2):
 
 def fit_mnist_model_single_digit(x_train, y_train, target_digit, model, epochs=10, batch_size=128):
     """Fit the model to the data.
-    compile the model and add parameters for the "optimizer", the loss function , 
+    compile the model and add parameters for  the "optimizer", the loss function , 
     and the metrics, Hint: use binary crossentropy for the loss function .
-    
+
     then fit the model on the training data. (pass the epochs and batch_size params)
     """
     y_train = binarize_labels(y_train, target_digit)
